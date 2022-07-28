@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
+import {Alert} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../services/api';
@@ -69,7 +70,12 @@ const AuthProvider: React.FC = ({ children }) => {
       })
       .then(response => response.json())
       .then(data => {
-        setUser(data);
+        const {message} = data;
+        if(message){
+          Alert.alert("Usuário ou senha incorretos")
+        }else{
+          setUser(data);
+        }
       })
       .catch(err => {
           console.log("Error occurred: " + err);

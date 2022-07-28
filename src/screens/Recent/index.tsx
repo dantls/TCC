@@ -24,16 +24,17 @@ export function Recent(){
        <KeyboardAvoidingView>
           <Content>
             <Title>Recentes</Title>
-            {/* <Button 
+            <Button 
               title="Logout"
-                onPress={() => handleLogout()}
-            /> */}
-          <TouchableOpacity
+              type="secondary"
+              onPress={handleLogout}
+            />
+          {/* <TouchableOpacity
             // style={styles.button}
             onPress={handleLogout}
           >
         <Text>Press Here</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
           </Content>
       </KeyboardAvoidingView>
     </Container>

@@ -3,6 +3,7 @@ import { Input } from '@components/Input';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/auth';
 import { Button } from '@components/Button';
+import { useNavigation } from '@react-navigation/native';
 
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import {
@@ -20,6 +21,7 @@ import {
 // import brandImg from '@assets/brand.png';
 
 export function SignIn(){
+  const { navigate } = useNavigation();
   const { signIn } = useAuth();
 
   const [email,setEmail]  = useState('');
@@ -93,7 +95,7 @@ export function SignIn(){
             <Button 
               title="Entrar"
               type="secondary"
-              onPress={() => handleRegister()}
+              onPress={handleRegister}
             />
 
             <ForgotPasswordButton>
@@ -102,8 +104,7 @@ export function SignIn(){
 
             <CreateAccountButton
               onPress={() => {
-                // formRef.current?.reset();
-                // navigation.navigate('SignUp');
+                navigate('User');
               }}
             >
               {/* <Icon name="log-in" size={20} color="#39ff14" /> */}

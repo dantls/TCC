@@ -1,5 +1,6 @@
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'; 
 
 import { KeyboardAvoidingView, Platform } from 'react-native';
@@ -10,27 +11,47 @@ import {
 } from './styles';
 
 
-export function Client(){
+export function User(){
+  const {navigate} = useNavigation();
   const [name,setName]  = useState('');
   const [email,setEmail]  = useState('');
-  const [rg,setRG]  = useState('');
-  const [cpf,setCPF]  = useState('');
+  const [password,setPassword]  = useState('');
+  const [confirmPassword,setConfirmPassword]  = useState('');
 
   function handleRegister(){
     const data = {
       name,
       email,
-      rg,
-      cpf
+      password,
+      confirmPassword
     }
-    console.log(data)
+
+    fetch("https://api-flash-services.herokuapp.com/src/Routes/user/create/", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+        body: JSON.stringify({
+            "name": data.name,
+            "email": data.email,
+            "password": data.password,
+            "confirmPassword": data.confirmPassword
+        })
+      })
+      .then(()=>{
+        navigate('Home')
+      })
+      .catch(err => {
+          console.log("Error occurred: " + err);
+      })
   }
 
   return(
     <Container>
        <KeyboardAvoidingView>
           <Content>
-            <Title>Cadastro de Cliente</Title>
+            <Title>Cadastro de Usuário</Title>
 
             <Input 
               placeholder="Nome"
@@ -47,22 +68,21 @@ export function Client(){
              onChangeText={setEmail}
 
             />
-            <Input 
-             placeholder="RG"
-             type="secondary"
-             autoCorrect = {false}
-             autoCapitalize = "none"
-             onChangeText={setRG}
-
-            />
-            <Input 
-              placeholder="CPF"
+           <Input 
+              placeholder="Senha"
               type="secondary"
-              autoCorrect = {false}
-              autoCapitalize = "none"
-              onChangeText={setCPF}
+              secureTextEntry
+              onChangeText={setPassword}
 
             />
+             <Input 
+              placeholder="Confirmação de Senha"
+              type="secondary"
+              secureTextEntry
+              onChangeText={setConfirmPassword}
+
+            />
+           
             <Button 
               title="Salvar"
               type="secondary"
