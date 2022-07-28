@@ -18,6 +18,7 @@ export function Favorite(){
        <KeyboardAvoidingView>
           <Content>
             <Title>Favoritos</Title>
+            
         </Content>
       </KeyboardAvoidingView>
     </Container>
