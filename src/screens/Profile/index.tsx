@@ -1,8 +1,9 @@
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'; 
+import { useNavigation } from '@react-navigation/native';
 
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import {
   Container,
   Content,
@@ -10,10 +11,56 @@ import {
 } from './styles';
 
 
+import { useAuth } from '../../hooks/auth';
+
+interface IUser {
+  id: string;
+  name:string;
+  email:string;
+  phone:string;
+  street:string;
+  district:string;
+  city: string;
+}
+
 export function Profile(){
+
+  const {navigate} = useNavigation();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    fetch("https://api-flash-services.herokuapp.com/src/Routes/user/read/", {
+          method: "POST",
+          headers: {
+            'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+            body: JSON.stringify({
+                "id": user.id
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+              const {user} = data;
+              setName(user.name);
+              setEmail(user.email);
+              setPhone(user.phone);
+              setStreet(user.street);
+              setDistrict(user.district);
+              setCity(user.city);
+
+              console.log(data)
+          })
+          .catch(err => {
+              console.log("Error occurred: " + err);
+          })
+
+  },[])
+
 
   function handleRegister(){
     const data = {
+      id: user.id,
       name,
       email,
       phone,
@@ -21,7 +68,28 @@ export function Profile(){
       district,
       city
     }
-
+    fetch("https://api-flash-services.herokuapp.com/src/Routes/user/update/", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+        body: JSON.stringify({
+            "id": data.id,
+            "name": data.name,
+            "email": data.email,
+            "phone": data.phone,
+            "street": data.street,
+            "district": data.district,
+            "city": data.city
+        })
+      })
+      .then(()=>{
+        navigate('Home')
+      })
+      .catch(err => {
+          console.log("Error occurred: " + err);
+      })
     console.log(data)
 
   }
@@ -39,10 +107,11 @@ export function Profile(){
        <KeyboardAvoidingView>
           <Content>
             <Title>Perfil</Title>
-
+            
             <Input 
               placeholder="Nome"
               type="secondary"
+              value={name}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setName}
@@ -50,6 +119,7 @@ export function Profile(){
             <Input 
              placeholder="E-mail"
              type="secondary"
+             value = {email}
              autoCorrect = {false}
              autoCapitalize = "none"
              onChangeText={setEmail}
@@ -57,6 +127,7 @@ export function Profile(){
             <Input 
              placeholder="Celular"
              type="secondary"
+             value = {phone}
              autoCorrect = {false}
              autoCapitalize = "none"
              onChangeText={setPhone}
@@ -64,6 +135,7 @@ export function Profile(){
             <Input 
               placeholder="Rua"
               type="secondary"
+              value = {street}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setStreet}
@@ -72,6 +144,7 @@ export function Profile(){
             <Input 
               placeholder="Bairro"
               type="secondary"
+              value = {district}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setDistrict}
@@ -80,6 +153,7 @@ export function Profile(){
             <Input 
               placeholder="Cidade"
               type="secondary"
+              value = {city}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setCity}
