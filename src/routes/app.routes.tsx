@@ -16,6 +16,7 @@ export function AppRoutes(){
           name="MainBottom"
           component={TabsRoutes}
         />
+
       </Navigator>
   )
 }

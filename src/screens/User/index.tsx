@@ -40,7 +40,7 @@ export function User(){
         })
       })
       .then(()=>{
-        navigate('Home')
+        navigate('SignIn')
       })
       .catch(err => {
           console.log("Error occurred: " + err);
