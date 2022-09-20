@@ -13,8 +13,8 @@ export function Routes(){
   return(
     <NavigationContainer>
       {/* <AuthRoutes/> */}
-      { ( Object.keys(user).length !== 0 ) ? <AppRoutes/> : <AuthRoutes />}
-      {/* {true? <AppRoutes/> : <AuthRoutes />} */}
+      {/* { ( Object.keys(user).length !== 0 ) ? <AppRoutes/> : <AuthRoutes />} */}
+      {true? <AppRoutes/> : <AuthRoutes />}
     </NavigationContainer>
   );
 }
