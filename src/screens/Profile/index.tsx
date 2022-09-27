@@ -1,98 +1,96 @@
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useCallback } from 'react'; 
 import { useNavigation } from '@react-navigation/native';
-
+import Icon from 'react-native-vector-icons/Feather';
 import { KeyboardAvoidingView } from 'react-native';
 import {
   Container,
   Content,
   Title,
+  UserAvatar,
+  UserAvatarButton,
+  BackButton
 } from './styles';
 
 
 import { useAuth } from '../../hooks/auth';
 
-interface IUser {
-  id: string;
-  name:string;
-  email:string;
-  phone:string;
-  street:string;
-  district:string;
-  city: string;
-}
 
 export function Profile(){
 
-  const {navigate} = useNavigation();
+  const navigation = useNavigation();
   const { user } = useAuth();
 
-  useEffect(() => {
-    fetch("https://api-flash-services.herokuapp.com/src/Routes/user/read/", {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json',
-              'Content-Type': 'application/json'
-          },
-            body: JSON.stringify({
-                "id": user.id
-            })
-          })
-          .then(response => response.json())
-          .then(data => {
-              const {user} = data;
-              setName(user.name);
-              setEmail(user.email);
-              setPhone(user.phone);
-              setStreet(user.street);
-              setDistrict(user.district);
-              setCity(user.city);
-
-              console.log(data)
-          })
-          .catch(err => {
-              console.log("Error occurred: " + err);
-          })
-
+  const handleGoBack = useCallback(() => {
+    navigation.goBack();
   },[])
 
+  // useEffect(() => {
+  //   fetch("https://api-flash-services.herokuapp.com/src/Routes/user/read/", {
+  //         method: "POST",
+  //         headers: {
+  //           'Accept': 'application/json',
+  //             'Content-Type': 'application/json'
+  //         },
+  //           body: JSON.stringify({
+  //               "id": user.id
+  //           })
+  //         })
+  //         .then(response => response.json())
+  //         .then(data => {
+  //             const {user} = data;
+  //             setName(user.name);
+  //             setEmail(user.email);
+  //             setPhone(user.phone);
+  //             setStreet(user.street);
+  //             setDistrict(user.district);
+  //             setCity(user.city);
 
-  function handleRegister(){
-    const data = {
-      id: user.id,
-      name,
-      email,
-      phone,
-      street,
-      district,
-      city
-    }
-    fetch("https://api-flash-services.herokuapp.com/src/Routes/user/update/", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-        body: JSON.stringify({
-            "id": data.id,
-            "name": data.name,
-            "email": data.email,
-            "phone": data.phone,
-            "street": data.street,
-            "district": data.district,
-            "city": data.city
-        })
-      })
-      .then(()=>{
-        navigate('Home')
-      })
-      .catch(err => {
-          console.log("Error occurred: " + err);
-      })
-    console.log(data)
+  //             console.log(data)
+  //         })
+  //         .catch(err => {
+  //             console.log("Error occurred: " + err);
+  //         })
 
-  }
+  // },[])
+
+
+  // function handleRegister(){
+  //   const data = {
+  //     id: user.id,
+  //     name,
+  //     email,
+  //     phone,
+  //     street,
+  //     district,
+  //     city
+  //   }
+  //   fetch("https://api-flash-services.herokuapp.com/src/Routes/user/update/", {
+  //     method: "POST",
+  //     headers: {
+  //       'Accept': 'application/json',
+  //         'Content-Type': 'application/json'
+  //     },
+  //       body: JSON.stringify({
+  //           "id": data.id,
+  //           "name": data.name,
+  //           "email": data.email,
+  //           "phone": data.phone,
+  //           "street": data.street,
+  //           "district": data.district,
+  //           "city": data.city
+  //       })
+  //     })
+  //     .then(()=>{
+  //       navigate('Home')
+  //     })
+  //     .catch(err => {
+  //         console.log("Error occurred: " + err);
+  //     })
+  //   console.log(data)
+
+  // }
 
   const [name,setName]  = useState('');
   const [email,setEmail]  = useState('');
@@ -106,12 +104,22 @@ export function Profile(){
     <Container>
        <KeyboardAvoidingView>
           <Content>
+            <BackButton
+              onPress={handleGoBack}
+            >
+                <Icon name="chevron-left" size={24} color="#999591" />
+            </BackButton>
             <Title>Perfil</Title>
             
+            
+
+            <UserAvatarButton>
+              <UserAvatar source={{uri: user.photo}}/>
+            </UserAvatarButton>
             <Input 
               placeholder="Nome"
               type="secondary"
-              value={name}
+              value={user.name}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setName}
@@ -119,7 +127,7 @@ export function Profile(){
             <Input 
              placeholder="E-mail"
              type="secondary"
-             value = {email}
+             value = {user.email}
              autoCorrect = {false}
              autoCapitalize = "none"
              onChangeText={setEmail}
@@ -127,7 +135,7 @@ export function Profile(){
             <Input 
              placeholder="Celular"
              type="secondary"
-             value = {phone}
+             value = {user.phone}
              autoCorrect = {false}
              autoCapitalize = "none"
              onChangeText={setPhone}
@@ -135,7 +143,7 @@ export function Profile(){
             <Input 
               placeholder="Rua"
               type="secondary"
-              value = {street}
+              value = {user.street}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setStreet}
@@ -144,7 +152,7 @@ export function Profile(){
             <Input 
               placeholder="Bairro"
               type="secondary"
-              value = {district}
+              value = {user.district}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setDistrict}
@@ -153,7 +161,7 @@ export function Profile(){
             <Input 
               placeholder="Cidade"
               type="secondary"
-              value = {city}
+              value = {user.city}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setCity}
@@ -164,7 +172,7 @@ export function Profile(){
             <Button 
               title="Salvar"
               type="secondary"
-              onPress={handleRegister}
+              onPress={()=>{}}
             />
         </Content>
       </KeyboardAvoidingView>

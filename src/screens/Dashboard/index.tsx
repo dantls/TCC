@@ -1,222 +1,117 @@
-import React, { useMemo, useState,useCallback } from 'react';
-import DateTimePicker from '@react-native-community/datetimepicker'
-import {Platform, Alert} from 'react-native';
-import { format } from 'date-fns';
+import { useNavigation } from '@react-navigation/native';
+import { Header } from '@src/components/Header/Index';
+// import { TabsRoutes } from '@src/routes/tabs.routes';
+// import { Header } from '@components/Header';
+import {useCallback, useState} from 'react';
+import Icon from 'react-native-vector-icons/Feather';
 import {
   Container,
-  Content,
-  Calendar,
-  CalendarTitle,
-  OpenDatePickerButton,
-  OpenDatePickerText,
-  Schedule,
-  Section,
-  SectionContent,
-  SectionTitle,
-  Hour,
-  HourText,
-  CreateAppointmentButton,
-  CreateAppointmentButtonText
+  ProvidersList,
+  ProvidersListTitle,
+  ProviderContainer,
+  ProviderMeta,
+  ProviderMetaText,
+  ProviderAvatar,
+  ProviderInfo,
+  ProviderName
 } from './styles';
-import { useNavigation } from '@react-navigation/native';
 
-const initialDate = [
-  {
-    "hour":8,
-    "available":false
-  },
-  {
-    "hour":9,
-    "available":true
-  },
-  {
-    "hour":10,
-    "available":true
-  },
-  {
-    "hour":11,
-    "available":true
-  },
-  {
-    "hour":12,
-    "available":false
-  },
-  {
-    "hour":13,
-    "available":true
-  },
-  {
-    "hour":14,
-    "available":true
-  },
-  {
-    "hour":15,
-    "available":true
-  },
-  {
-    "hour":16,
-    "available":true
-  },
-  {
-    "hour":17,
-    "available":true
-  }
-  
-]
-
-interface AvailabilityItem {
-  hour: number;
-  available: boolean;
+interface Provider {
+  id: number;
+  name: string;
+  photo: string;
 }
 
+const providersList: Provider[] = [
+  {
+    "id": 3,
+    "name": "ALAM TRINDADE MANUTENCOES",
+    "email": "alam.trindade@bonitoponto.com.br",
+    "phone": "(67)98418-1733",
+    "photo": "https:\/\/eletrokassio.com.br\/wp-content\/uploads\/elementor\/thumbs\/Manutencoes-Residenciais-pf4uomuxioe64g84homm3euiom3uaryuwlpsi0f0k4.png",
+    "password": null,
+    "cash": "0",
+    "idoccupation": null
+  },
+  {
+    "id": 4,
+    "name": "MARIANA HAIR",
+    "email": "marihair@gmail.com",
+    "phone": "(67)99188-7766",
+    "photo": "https:\/\/static01.nyt.com\/images\/2022\/04\/24\/magazine\/24mag-kids-hairdiscrimination-03\/24mag-kids-hairdiscrimination-03-mobileMasterAt3x.jpg",
+    "password": null,
+    "cash": "0",
+    "idoccupation": null
+  },
+  {
+    "id": 5,
+    "name": "MILAGRE ESTETICA",
+    "email": "mnc@gmail.com",
+    "phone": "(67)98418-1733",
+    "photo": "https:\/\/eletrokassio.com.br\/wp-content\/uploads\/elementor\/thumbs\/Manutencoes-Residenciais-pf4uomuxioe64g84homm3euiom3uaryuwlpsi0f0k4.png",
+    "password": null,
+    "cash": "0",
+    "idoccupation": null
+  },
+  {
+    "id": 1,
+    "name": "BONITO PONTO MÁQUINAS DE COSTURA",
+    "email": "bonitoponto@gmail.com",
+    "phone": "(67)98418-1733",
+    "photo": "https:\/\/scontent.ftjl2-1.fna.fbcdn.net\/v\/t39.30808-6\/217640788_4030828770371441_6311139173051681747_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=0CXl0VxWHFUAX8SmuEZ&_nc_oc=AQm6H_ohC9ZGXjEIuzUXLbEgjyamBGovBvg01Pbu1utKHfQsvGrGt830nqQs1ymjBfE&_nc_ht=scontent.ftjl2-1.fna&oh=00_AT-vlc44c4_LIxLmtNjoSGkr337oVP3jOu2HMK7hLgmCwg&oe=62EAB485",
+    "password": null,
+    "cash": null,
+    "idoccupation": null
+  },
+]
 
 export function Dashboard(){
-  const {goBack, navigate} = useNavigation();
+  const {navigate} = useNavigation()
+  const [providers, setProviders] = useState<Provider[]>(providersList);
 
-  const [availability, setAvailability] = useState<AvailabilityItem[]>(initialDate);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedHour, setSelectedHour] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const navigateToProfile = useCallback(() => {
+    navigate('Profile');
+  },[navigate])
 
-  const handleToggleDatePicker = () => {
-    return setShowDatePicker((state) => !state)
-  }
-  const handleDateChanged = (event: any, date: Date | undefined) => {
-    if (date) {
-      setSelectedDate(date);
-    }
-    if(Platform.OS === 'android') {
-      return setShowDatePicker(false);
-    }
-  }
+  return(
+    <>
+    <Header />
 
-  const handleSelectHour = useCallback((hour:number) => {
-    setSelectedHour(hour);
-  },[])
-
-  const handleCreateAppointment = useCallback(async () => {
-    try{
-      const date = selectedDate;
-
-      console.log(date)
-      date.setHours(selectedHour);
-      date.setMinutes(0);
-
-      // await api.post('appointments',{
-      //   provider_id: selectedProvider,
-      //   date,
-      // });
-
-      navigate(
-        "AppointmentsCreated",
-        {date: date.getTime()}
-      );
-
-    }catch(error){
-      Alert.alert(
-        'Erro ao criar agendamento',
-        'Ocorreu um erro ao tentar criar o agendamento, tente novamente.'
-      )
-    }
-  },[])
-
-  const morningAvaliability = useMemo(()=>{
-    return availability
-      .filter(({hour}) => hour < 12)
-      .map(({hour,available})=>{
-        return {
-          hour,
-          available,
-          hourFormatted: format(new Date().setHours(hour), 'HH:00')
-        }
-      })
-  },[])
-  const afternoonAvaliability = useMemo(()=>{
-    return availability
-      .filter(({hour}) => hour >= 12)
-      .map(({hour,available})=>{
-        return {
-          hour,
-          available,
-          hourFormatted: format(new Date().setHours(hour), "HH:00")
-        }
-      })
-  },[])
-  return (
     <Container>
-
-      <Content>
-      <Calendar>
-        <CalendarTitle>Escolha a data</CalendarTitle>
-
-        <OpenDatePickerButton
-          onPress={handleToggleDatePicker}
-        >
-          <OpenDatePickerText>Escolha outra data</OpenDatePickerText>
-        </OpenDatePickerButton>
-        {
-          showDatePicker &&
-          (
-            <DateTimePicker 
-              mode="date" 
-              is24Hour
-              display="calendar"
-              onChange={handleDateChanged}
-              value={selectedDate}
-            />
-          )        
+      {/* <Header /> */}
+        
+      
+      <ProvidersList
+        data={providers}
+        keyExtractor={provider => provider.id}
+        ListHeaderComponent={
+          <ProvidersListTitle>Cabelereiros</ProvidersListTitle>
         }
-      </Calendar>
+        renderItem={({ item: provider }) => (
+          <ProviderContainer
+            // onPress={() => navigateToCreateAppointment(provider.id)}
+            onPress={() => {}}
+            key={provider.id}
+          >
+            <ProviderAvatar source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIxIo0i7f40LMinBi7faUWmfu76GX_VQcYEg&usqp=CAU" }} />
+            <ProviderInfo>
+              <ProviderName>Joaquim do Corte</ProviderName>
+              <ProviderMeta>
+                <Icon name="calendar" size={14} color="#ff9000" />
+                <ProviderMetaText>Segunda à sábado</ProviderMetaText>
+              </ProviderMeta>
 
-      <Schedule>
-        <CalendarTitle>Escolha o horário</CalendarTitle>
-        <Section>
-          <SectionTitle>Manhã</SectionTitle>
-          <SectionContent>
-            {morningAvaliability.map(({hourFormatted,hour, available}) => (
-              <Hour 
-                enabled={available}
-                selected={selectedHour === hour}
-                available={available}
-                key={hourFormatted}
-                onPress={() => handleSelectHour(hour)}
-              >
-                <HourText
-                  selected={selectedHour === hour}
-                >
-                  {hourFormatted}
-                </HourText>
-              </Hour>
-            ))}
-          </SectionContent>
-        </Section>
-        <Section>
-          <SectionTitle>Tarde</SectionTitle>
-          <SectionContent>
-            {afternoonAvaliability.map(({hourFormatted,hour, available}) => (
-              <Hour 
-                enabled={available}
-                selected={selectedHour === hour}
-                available={available}
-                key={hourFormatted}
-                onPress={() => handleSelectHour(hour)}
-              >
-                <HourText
-                  selected={selectedHour === hour}
-                >
-                  {hourFormatted}
-                </HourText>
-              </Hour>
-            ))}
-          </SectionContent>
-        </Section>
-      </Schedule>
-      <CreateAppointmentButton 
-        onPress={handleCreateAppointment}
-      >
-        <CreateAppointmentButtonText>Agendar</CreateAppointmentButtonText>
-      </CreateAppointmentButton>
-      </Content>
+              <ProviderMeta>
+                <Icon name="clock" size={14} color="#ff9000" />
+                <ProviderMetaText>8h às 18h</ProviderMetaText>
+              </ProviderMeta>
+            </ProviderInfo>
+          </ProviderContainer>
+        )}
+      />
+      {/* <TabsRoutes /> */}
+      
     </Container>
-  );
+    </>
+  )
 }

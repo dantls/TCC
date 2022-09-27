@@ -1,11 +1,11 @@
-import styled, {css} from 'styled-components/native';
+import styled from 'styled-components/native';
+import { FlatList } from 'react-native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
-interface HourProps {
-  available: boolean;
-  selected: boolean;
-}
-interface HourTextProps {
-  selected: boolean;
+interface Provider {
+  id: number;
+  name: string;
+  photo: string;
 }
 
 export const Container = styled.View`
@@ -14,94 +14,49 @@ export const Container = styled.View`
   /* justify-content: center; */
 `;
 
-export const Content = styled.ScrollView`
+export const ProvidersList = styled(FlatList as new () => FlatList<Provider>)`
+  padding: 32px 24px;
 `;
 
-export const Calendar = styled.View`
-  background-color: ${({theme}) => theme.COLORS.BACKGROUND};
-`;
-export const CalendarTitle = styled.Text`
-  margin: 36px 24px  ;
-  font-size: 24px;
-  ${({theme})=> css`
-    font-family: ${theme.FONTS.TITLE};
-    color: ${theme.COLORS.TITLE}
-  `};
-
-`;
-export const OpenDatePickerButton = styled.TouchableOpacity`
-  height: 46px;
+export const ProviderContainer = styled.TouchableOpacity`
+  background: #3e3b47;
   border-radius: 10px;
+  padding: 20px;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  background: #ff9000;
-  margin: 0 24px;
 `;
 
-export const OpenDatePickerText = styled.Text`
-  font-size: 16px;
-  ${({theme})=> css`
-    font-family: ${theme.FONTS.TEXT};
-  `};
-  font-weight: bold;
+export const ProviderAvatar = styled.Image`
+  width: 72px;
+  height: 72px;
+  border-radius: 36px;
 `;
 
+export const ProviderInfo = styled.View`
+  flex: 1;
+  margin-left: 20px;
+`;
 
- export const Schedule = styled.View`
-  padding: 24px 0 16px;
- 
- `;
- export const Section = styled.View`
-  margin-bottom: 24px;
- 
- `;
- export const SectionContent = styled.ScrollView.attrs({
-  contentContainerStyle: {paddingHorizontal: 24},
-  horizontal: true,
-  showsHorizontalScrollIndicator: false,
- })`
- 
- 
- `;
- export const SectionTitle = styled.Text`
+export const ProviderName = styled.Text`
+  font-family: 'RobotoSlab-Medium';
   font-size: 18px;
-  color: #999591;
-  ${({theme})=> css`
-    font-family: ${theme.FONTS.TEXT};
-  `};
-  margin: 0 24px 12px;
- `;
- export const Hour = styled.TouchableOpacity<HourProps>`
-  padding: 12px;
-  background: ${({selected}) => selected ? '#ff9000': '#3e3b47'};
-  border-radius: 10px;
-  margin-right: 10px;
-
-  opacity: ${({available})=> ( available ? 1 : 0.3)};
- 
- `;
-export const HourText = styled.Text<HourTextProps>`
-  color: ${({selected}) => selected ? '#232129': '#f4ede8'};
-  ${({theme})=> css`
-    font-family: ${theme.FONTS.TITLE};
-  `}
-
+  color: #f4ede8;
 `;
 
-export const CreateAppointmentButton = styled.TouchableOpacity`
- height: 50px;
-  border-radius: 10px;
+export const ProviderMeta = styled.View`
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  background: #ff9000;
-  margin: 0 24px;
+  margin-top: 8px;
 `;
-export const CreateAppointmentButtonText = styled.Text`
- 
-  ${({theme})=> css`
-    font-family: ${theme.FONTS.TEXT};
-  `}
-  font-weight: bold;
-  font-size: 16px;
-  color: #232129;
+
+export const ProviderMetaText = styled.Text`
+  color: #999591;
+  margin-left: 8px;
+  font-family: 'RobotoSlab-Regular';
+`;
+export const ProvidersListTitle = styled.Text`
+  font-family: 'RobotoSlab-Medium';
+  font-size: 24px;
+  color: #f4ede8;
+  margin-bottom: 24px;
 `;

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 const { Navigator, Screen } = createStackNavigator();
-// import {TabsRoutes} from './tabs.routes';
-import { Dashboard1 } from '../screens/Dashboard1';
+import {TabsRoutes} from './tabs.routes';
 import { Dashboard } from '../screens/Dashboard';
+import { Appointments } from '../screens/Appointments';
 import { AppointmentsCreated } from '../screens/AppointmentsCreated';
 import {Profile} from '@screens/Profile';
 
@@ -15,17 +15,17 @@ export function AppRoutes(){
           headerShown:false,
         }}
       >
-        {/* <Screen
+        <Screen
           name="MainBottom"
           component={TabsRoutes}
-        /> */}
-        <Screen
-          name="Dashboard1"
-          component={Dashboard1}
         />
         <Screen
           name="Dashboard"
           component={Dashboard}
+        />
+        <Screen
+          name="Appointments"
+          component={Appointments}
         />
         <Screen
           name="AppointmentsCreated"

@@ -23,6 +23,7 @@ import {
 
 import {OccupationButton } from '../../components/OccupationButton';
 import { Provider } from '../Provider';
+import { Header } from '@src/components/Header/Index';
 
 interface OccupationsProps {
   id: number;
@@ -132,10 +133,12 @@ export function Home(){
 
   return(
     <Container>
+      <Header />
        <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding': undefined}
         >
         <Content>
+          
             <FlatList
               data={loadOccupations}
               keyExtractor={(item) => String(item.name)}

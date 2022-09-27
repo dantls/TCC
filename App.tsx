@@ -11,6 +11,7 @@ import theme from './src/theme';
 
 import { Routes } from './src/routes';
 import AppProvider from '@src/hooks';
+import { TabsRoutes } from '@src/routes/tabs.routes';
 
 export default function App() {
 

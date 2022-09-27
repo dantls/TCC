@@ -22,13 +22,14 @@ import {
 
 export function SignIn(){
   const { navigate } = useNavigation();
-  const { signIn } = useAuth();
+  const { signIn,signOut, user } = useAuth();
 
   const [email,setEmail]  = useState('');
   const [password,setPassword]  = useState('');
 
   function handleRegister(){
-    signIn({email, password});
+    // signIn({email, password});
+    signOut();
   
     // fetch("https://api-flash-services.herokuapp.com/src/Routes/login/", {
     //   method: "POST",
