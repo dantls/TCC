@@ -75,43 +75,40 @@ export function Dashboard(){
 
   return(
     <>
-    <Header />
+      <Header />
 
-    <Container>
-      {/* <Header /> */}
+      <Container>
         
-      
-      <ProvidersList
-        data={providers}
-        keyExtractor={provider => provider.id}
-        ListHeaderComponent={
-          <ProvidersListTitle>Cabelereiros</ProvidersListTitle>
-        }
-        renderItem={({ item: provider }) => (
-          <ProviderContainer
-            // onPress={() => navigateToCreateAppointment(provider.id)}
-            onPress={() => {}}
-            key={provider.id}
-          >
-            <ProviderAvatar source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIxIo0i7f40LMinBi7faUWmfu76GX_VQcYEg&usqp=CAU" }} />
-            <ProviderInfo>
-              <ProviderName>Joaquim do Corte</ProviderName>
-              <ProviderMeta>
-                <Icon name="calendar" size={14} color="#ff9000" />
-                <ProviderMetaText>Segunda à sábado</ProviderMetaText>
-              </ProviderMeta>
+        <ProvidersList
+          data={providers}
+          keyExtractor={provider => provider.id}
+          ListHeaderComponent={
+            <ProvidersListTitle>Cabelereiros</ProvidersListTitle>
+          }
+          renderItem={({ item: provider }) => (
+            <ProviderContainer
+              // onPress={() => navigateToCreateAppointment(provider.id)}
+              onPress={() => {}}
+              key={provider.id}
+            >
+              <ProviderAvatar source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIxIo0i7f40LMinBi7faUWmfu76GX_VQcYEg&usqp=CAU" }} />
+              <ProviderInfo>
+                <ProviderName>Joaquim do Corte</ProviderName>
+                <ProviderMeta>
+                  <Icon name="calendar" size={14} color="#ff9000" />
+                  <ProviderMetaText>Segunda à sábado</ProviderMetaText>
+                </ProviderMeta>
 
-              <ProviderMeta>
-                <Icon name="clock" size={14} color="#ff9000" />
-                <ProviderMetaText>8h às 18h</ProviderMetaText>
-              </ProviderMeta>
-            </ProviderInfo>
-          </ProviderContainer>
-        )}
-      />
-      {/* <TabsRoutes /> */}
-      
-    </Container>
+                <ProviderMeta>
+                  <Icon name="clock" size={14} color="#ff9000" />
+                  <ProviderMetaText>8h às 18h</ProviderMetaText>
+                </ProviderMeta>
+              </ProviderInfo>
+            </ProviderContainer>
+          )}
+        />
+        
+      </Container>
     </>
   )
 }

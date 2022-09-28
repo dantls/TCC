@@ -1,4 +1,13 @@
 import styled, {css} from 'styled-components/native';
+import { FlatList } from 'react-native';
+import {Provider} from './index';
+
+interface ProviderContainerProps {
+  selected: boolean;
+}
+interface ProviderNameProps {
+  selected: boolean;
+}
 
 interface HourProps {
   available: boolean;
@@ -16,6 +25,37 @@ export const Container = styled.View`
 
 export const Content = styled.ScrollView`
 `;
+
+export const ProvidersListContainer = styled.View`
+  height: 112px;
+`;
+
+export const ProvidersList = styled(FlatList as new () => FlatList<Provider>)`
+  padding: 32px 24px 16px;
+`;
+
+
+export const ProviderContainer = styled.TouchableOpacity<ProviderContainerProps>`
+  background: ${({selected}) => selected ? "#f69000": "#3e3b47"} ;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 12px;
+  margin-right: 16px;
+  border-radius: 10px;
+
+
+`
+export const ProviderAvatar = styled.Image`
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+`
+export const ProviderName = styled.Text<ProviderNameProps>`
+  margin-left: 8px;
+  font-size: 16px;
+  font-family: ${({theme}) => theme.FONTS.TITLE};
+  color: ${({selected}) => selected ? "#232129": "#f4ede8"} ;
+`
 
 export const Calendar = styled.View`
   background-color: ${({theme}) => theme.COLORS.BACKGROUND};

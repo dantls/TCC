@@ -28,8 +28,8 @@ export function SignIn(){
   const [password,setPassword]  = useState('');
 
   function handleRegister(){
-    // signIn({email, password});
-    signOut();
+    signIn({email, password});
+   // signOut();
   
     // fetch("https://api-flash-services.herokuapp.com/src/Routes/login/", {
     //   method: "POST",

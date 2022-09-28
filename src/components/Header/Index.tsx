@@ -13,12 +13,13 @@ import { useAuth } from '@src/hooks/auth';
 
 export function Header(){
 
-    const { user } = useAuth();
+    const { user, signOut } = useAuth();
 
     const {navigate} = useNavigation()
 
     const navigateToProfile = useCallback(() => {
-      navigate('Profile');
+      // navigate('Profile');
+      signOut();
     },[navigate])
 
 

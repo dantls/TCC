@@ -27,7 +27,7 @@ export function AppointmentsCreated(){
   const handleOkPressed = useCallback(() => {
     reset({
       routes: [
-        { name: 'Dashboard'}
+        { name: 'MainBottom'}
       ],
       index: 0
     })
@@ -46,7 +46,7 @@ export function AppointmentsCreated(){
       <Icon 
         name="check"
         size={80}
-        color="#04d361"
+        color="#FF9000"
       />
       <Title>Agendamento concluído</Title>
       <Description>{formattedDate}</Description>

@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const { Navigator, Screen } = createStackNavigator();
 import {TabsRoutes} from './tabs.routes';
 import { Dashboard } from '../screens/Dashboard';
+import { Home } from '../screens/Home';
 import { Appointments } from '../screens/Appointments';
 import { AppointmentsCreated } from '../screens/AppointmentsCreated';
 import {Profile} from '@screens/Profile';

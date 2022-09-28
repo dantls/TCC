@@ -1,10 +1,12 @@
-import React, { useMemo, useState,useCallback } from 'react';
+import React, { useMemo, useState,useCallback, useEffect } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker'
-import {Platform, Alert} from 'react-native';
+import {Platform, Alert, Text} from 'react-native';
 import { format } from 'date-fns';
 import {
   Container,
   Content,
+  ProvidersListContainer,
+  ProvidersList,
   Calendar,
   CalendarTitle,
   OpenDatePickerButton,
@@ -16,9 +18,12 @@ import {
   Hour,
   HourText,
   CreateAppointmentButton,
-  CreateAppointmentButtonText
+  CreateAppointmentButtonText,
+  ProviderContainer,
+  ProviderAvatar,
+  ProviderName
 } from './styles';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const initialDate = [
   {
@@ -69,12 +74,30 @@ interface AvailabilityItem {
   available: boolean;
 }
 
+export interface Provider {
+  id: number;
+  name: string;
+  email:string;
+  photo: string;
+  isFavorite?: boolean;
+}
+
+interface RouteParams {
+  providerId: string;
+}
+
 
 export function Appointments(){
+  const route = useRoute();
   const {goBack, navigate} = useNavigation();
 
+  const routeParams = route.params as RouteParams;
+
+  const [providers, setProviders] = useState<Provider[]>([]);
   const [availability, setAvailability] = useState<AvailabilityItem[]>(initialDate);
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId)
   const [selectedHour, setSelectedHour] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -90,6 +113,10 @@ export function Appointments(){
     }
   }
 
+  const handleSelectProvider = useCallback((providerId: string) => {
+    setSelectedProvider(providerId);
+  },[])
+
   const handleSelectHour = useCallback((hour:number) => {
     setSelectedHour(hour);
   },[])
@@ -98,7 +125,6 @@ export function Appointments(){
     try{
       const date = selectedDate;
 
-      console.log(date)
       date.setHours(selectedHour);
       date.setMinutes(0);
 
@@ -142,10 +168,60 @@ export function Appointments(){
         }
       })
   },[])
+
+ 
+  useEffect(() => {
+
+    function loadProviders(){
+      fetch("https://api-flash-services.herokuapp.com/src/Routes/provider/getall/", {
+            method: "GET",
+            headers: {
+              'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+              body: null
+            })
+            .then(response => response.json())
+            .then(data  => {
+                const {providers: items} = data
+                setProviders(items);
+                console.log(items)
+            })
+            .catch(err => {
+                console.log("Error occurred: " + err);
+            })
+    }
+
+    loadProviders();
+  },[])
+
   return (
     <Container>
 
       <Content>
+
+      <ProvidersListContainer>
+        <ProvidersList
+          horizontal
+          data={providers}
+          keyExtractor={(provider) => provider.id}
+          renderItem={({ item : provider}) => (
+            <ProviderContainer 
+              onPress={() => handleSelectProvider(provider.id)}
+              selected={provider.id === selectedProvider}
+            >
+              <ProviderAvatar source= {{uri: provider.photo}}/>
+              <ProviderName
+                selected={provider.id === selectedProvider}
+              >
+                {provider.name}
+              </ProviderName>
+            </ProviderContainer>
+          )}
+        
+        />
+      </ProvidersListContainer>
+
       <Calendar>
         <CalendarTitle>Escolha a data</CalendarTitle>
 

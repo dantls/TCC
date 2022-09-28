@@ -6,11 +6,14 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useFavorites } from '@hooks/favorites';
 import { useAuth } from '@hooks/auth';
+import { OccupationButton } from '../../components/OccupationButton';
+import { Provider } from '../Provider';
+import { Header } from '@src/components/Header/Index';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   Container,
   Content,
-  Title,
   ProvidersList,
   ProvidersListTitle,
   ProviderContainer,
@@ -21,9 +24,7 @@ import {
   ProviderName,
 } from './styles';
 
-import {OccupationButton } from '../../components/OccupationButton';
-import { Provider } from '../Provider';
-import { Header } from '@src/components/Header/Index';
+
 
 interface OccupationsProps {
   id: number;
@@ -40,6 +41,7 @@ export interface Provider {
 
 export function Home(){
   const {user} = useAuth(); 
+  const {navigate} = useNavigation();
   const {favorites, getFavorites, addFavorite} = useFavorites(); 
 
   const [loadOccupations, setLoadOccupations] = useState<OccupationsProps[]>([]);
@@ -121,15 +123,19 @@ export function Home(){
   function handleOccupationSelected (occupation: number){
     setOccupationsSelected(occupation);
     console.log(occupationsSelected)
-    // if(occupation === 0){
-    //   return setFilteredPlants(plants)
-    // }
+    if(occupation === 0){
+      return setFilteredPlants(plants)
+    }
 
-    // const filtered = plants.filter(plant => plant.environments.includes(environment))
+    const filtered = plants.filter(plant => plant.environments.includes(environment))
 
-    // setFilteredPlants(filtered);
+    setFilteredPlants(filtered);
 
   }
+
+  const navigateToCreateAppointment = useCallback((providerId: string) => {
+    navigate('Appointments', {providerId})
+  },[navigate]);
 
   return(
     <Container>
@@ -157,7 +163,7 @@ export function Home(){
                 paddingBottom: 5,
                 paddingRight: 30,
                 marginLeft: 32,
-                marginVertical: 32,
+                marginVertical: 24,
               }}
             />
 
@@ -170,7 +176,7 @@ export function Home(){
                     }
                     renderItem={({ item: provider }) => (
                       <ProviderContainer
-                        // onPress={() => navigateToCreateAppointment(provider.id)}
+                        onPress={() => navigateToCreateAppointment(provider.id)}
                       >
                         <ProviderAvatar source={{ uri: provider.photo }} />
                         <ProviderInfo>
