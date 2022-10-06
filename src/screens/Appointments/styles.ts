@@ -61,7 +61,7 @@ export const Calendar = styled.View`
   background-color: ${({theme}) => theme.COLORS.BACKGROUND};
 `;
 export const CalendarTitle = styled.Text`
-  margin: 36px 24px  ;
+  margin: 12px 24px  ;
   font-size: 24px;
   ${({theme})=> css`
     font-family: ${theme.FONTS.TITLE};

@@ -12,6 +12,7 @@ import theme from './src/theme';
 import { Routes } from './src/routes';
 import AppProvider from '@src/hooks';
 import { TabsRoutes } from '@src/routes/tabs.routes';
+import { Appointments } from '@src/screens/Appointments';
 
 export default function App() {
 

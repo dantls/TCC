@@ -7,7 +7,7 @@ import {
   Content,
   ProvidersListContainer,
   ProvidersList,
-  Calendar,
+  // Calendar,
   CalendarTitle,
   OpenDatePickerButton,
   OpenDatePickerText,
@@ -24,6 +24,8 @@ import {
   ProviderName
 } from './styles';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Calendar,  DateData, MarkedDateProps } from '@src/components/Calendar';
+import { generateMarked } from '@src/components/Calendar/generateMarked';
 
 const initialDate = [
   {
@@ -99,19 +101,27 @@ export function Appointments(){
 
   const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId)
   const [selectedHour, setSelectedHour] = useState(0);
-  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleToggleDatePicker = () => {
-    return setShowDatePicker((state) => !state)
+  const [selectedDate, setSelectedDate] = useState<DateData>({} as DateData);
+
+  const [markedDate, setMarketDate] = useState<MarkedDateProps>({}as MarkedDateProps)
+
+  const handleChangeDate = (date:DateData)=>{
+    setSelectedDate(date)
+    setMarketDate(generateMarked(date))
   }
-  const handleDateChanged = (event: any, date: Date | undefined) => {
-    if (date) {
-      setSelectedDate(date);
-    }
-    if(Platform.OS === 'android') {
-      return setShowDatePicker(false);
-    }
-  }
+
+  // const handleToggleDatePicker = () => {
+  //   return setShowDatePicker((state) => !state)
+  // }
+  // const handleDateChanged = (event: any, date: Date | undefined) => {
+  //   if (date) {
+  //     setSelectedDate(date);
+  //   }
+  //   if(Platform.OS === 'android') {
+  //     return setShowDatePicker(false);
+  //   }
+  // }
 
   const handleSelectProvider = useCallback((providerId: string) => {
     setSelectedProvider(providerId);
@@ -123,8 +133,9 @@ export function Appointments(){
 
   const handleCreateAppointment = useCallback(async () => {
     try{
-      const date = selectedDate;
-
+      
+      const date = new Date(selectedDate.year,selectedDate.month-1,selectedDate.day);
+      console.log(date)
       date.setHours(selectedHour);
       date.setMinutes(0);
 
@@ -144,7 +155,7 @@ export function Appointments(){
         'Ocorreu um erro ao tentar criar o agendamento, tente novamente.'
       )
     }
-  },[])
+  },[selectedDate,selectedHour,])
 
   const morningAvaliability = useMemo(()=>{
     return availability
@@ -200,6 +211,7 @@ export function Appointments(){
 
       <Content>
 
+      
       <ProvidersListContainer>
         <ProvidersList
           horizontal
@@ -221,8 +233,13 @@ export function Appointments(){
         
         />
       </ProvidersListContainer>
+      <CalendarTitle>Escolha a data</CalendarTitle>
+      <Calendar
+         markedDates={markedDate}
+         onDayPress={handleChangeDate}
+      />
 
-      <Calendar>
+      {/* <Calendar>
         <CalendarTitle>Escolha a data</CalendarTitle>
 
         <OpenDatePickerButton
@@ -242,7 +259,7 @@ export function Appointments(){
             />
           )        
         }
-      </Calendar>
+      </Calendar> */}
 
       <Schedule>
         <CalendarTitle>Escolha o horário</CalendarTitle>
@@ -288,7 +305,9 @@ export function Appointments(){
         </Section>
       </Schedule>
       <CreateAppointmentButton 
-        onPress={handleCreateAppointment}
+        onPress={
+          handleCreateAppointment
+        }
       >
         <CreateAppointmentButtonText>Agendar</CreateAppointmentButtonText>
       </CreateAppointmentButton>

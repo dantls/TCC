@@ -7,7 +7,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { useFavorites } from '@hooks/favorites';
 import { useAuth } from '@hooks/auth';
 import { OccupationButton } from '../../components/OccupationButton';
-import { Provider } from '../Provider';
+// import { Provider } from '../Provider';
 import { Header } from '@src/components/Header/Index';
 import { useNavigation } from '@react-navigation/native';
 
