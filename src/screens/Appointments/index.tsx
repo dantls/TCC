@@ -30,6 +30,8 @@ import { generateMarked } from '@src/components/Calendar/generateMarked';
 import { BackButton } from '@src/components/BackButton';
 import { TextArea } from '@src/components/TextArea';
 import { Input } from '@src/components/Input';
+import { useAuth } from '@src/hooks/auth';
+import api from '@src/services/api';
 
 const initialDate = [
   {
@@ -96,6 +98,7 @@ interface RouteParams {
 export function Appointments(){
   const route = useRoute();
   const {goBack, navigate} = useNavigation();
+  const {user} = useAuth(); 
 
   const routeParams = route.params as RouteParams;
 
@@ -103,7 +106,8 @@ export function Appointments(){
   const [availability, setAvailability] = useState<AvailabilityItem[]>(initialDate);
   // const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId)
+  const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId);
+
   const [selectedHour, setSelectedHour] = useState(0);
 
   const [selectedDate, setSelectedDate] = useState<DateData>({} as DateData);
@@ -145,11 +149,18 @@ export function Appointments(){
       const date = new Date(selectedDate.year,selectedDate.month-1,selectedDate.day);
       date.setHours(selectedHour);
       date.setMinutes(0);
+      
+      const data = {
+        iduser: user.id,
+        idprovider:selectedProvider,
+        dateservice: `${selectedDate.day}-${String(selectedDate.month-1).padStart(2,'0')}-${selectedDate.year}`,
+        timeservice: `${String(selectedHour).padStart(2,'0')}:00`,  
+        localservice,
+        typeservice,
+        description        
+      }
 
-      // await api.post('appointments',{
-      //   provider_id: selectedProvider,
-      //   date,
-      // });
+      const response = await api.post('service/create/', data);
 
       navigate(
         "AppointmentsCreated",
@@ -162,7 +173,12 @@ export function Appointments(){
         'Ocorreu um erro ao tentar criar o agendamento, tente novamente.'
       )
     }
-  },[selectedDate,selectedHour,])
+  },[selectedDate,
+    selectedHour,
+    localservice,
+    typeservice,
+    description ,
+   ])
 
   const morningAvaliability = useMemo(()=>{
     return availability
@@ -298,14 +314,26 @@ export function Appointments(){
       <SectionTitle>Tipo do serviço</SectionTitle>
     
       <TextArea
+        multiline
+        maxLength={100}
+        numberOfLines={5}
+        autoCorrect={false}
         onChangeText={setTypeservice}
       />
       <SectionTitle>Descrição do serviço</SectionTitle>
       <TextArea
+        multiline
+        maxLength={100}
+        numberOfLines={5}
+        autoCorrect={false}
         onChangeText={setDescription}
       />
       <SectionTitle>Local do serviço</SectionTitle>
       <TextArea
+        multiline
+        maxLength={100}
+        numberOfLines={5}
+        autoCorrect={false}
         onChangeText={setLocalService}
       />
       <CreateAppointmentButton 
