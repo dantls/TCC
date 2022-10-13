@@ -9,22 +9,22 @@ import {Container,
 } from './styles';
 
 interface Props {
-  imagesUrl: string[];
+  imagesUrl: string;
 }
 
 
 export function ImageSlider({imagesUrl}:Props){
   return(
     <Container>
-      <ImageIndexes>
+      {/* <ImageIndexes>
         <ImageIndex active={true}/>
         <ImageIndex active={false}/>
         <ImageIndex active={false}/>
-      </ImageIndexes>
+      </ImageIndexes> */}
 
       <CarImageWrapper>
         <CarImage 
-          source={{uri: imagesUrl[0] }}
+          source={{uri: imagesUrl }}
           resizeMode="contain"
         />
       </CarImageWrapper>

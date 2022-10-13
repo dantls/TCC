@@ -22,6 +22,7 @@ export default {
 
     SHAPE: '#DCDCDC',
     TITLE: '#F3EFE5',
+    
 
     GRADIENT: ['#B83341', '#E03F50'],
   },

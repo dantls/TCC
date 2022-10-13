@@ -11,13 +11,19 @@ export const Container = styled.View`
 `;
 
 
-export const Content = styled.ScrollView.attrs({
-  showsVerticalScrollIndicator: false,
-  contentContainerStyle: {
-    paddingBottom: getBottomSpace() + 48
-  }
-})`
+// export const Content = styled.ScrollView.attrs({
+//   showsVerticalScrollIndicator: false,
+//   contentContainerStyle: {
+//     paddingBottom: getBottomSpace() + 48
+//   }
+// })`
+//   width: 100%;
+//   /* padding: 0 32px; */
+
+// `;
+export const Content = styled.View`
   width: 100%;
+  padding-bottom: ${ getBottomSpace() + 48}px;
   /* padding: 0 32px; */
 
 `;
@@ -35,7 +41,7 @@ export const Title = styled.Text`
 `;
 
 export const ProvidersList = styled(FlatList as new () => FlatList<Provider>)`
-  padding: 32px 24px 16px;
+  padding: 32px 24px 32px;
 `;
 
 export const ProviderContainer = styled(RectButton)`

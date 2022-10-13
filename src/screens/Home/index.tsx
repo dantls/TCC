@@ -44,7 +44,7 @@ export function Home(){
   const {navigate} = useNavigation();
   const {favorites, getFavorites, addFavorite} = useFavorites(); 
 
-  const [loadOccupations, setLoadOccupations] = useState<OccupationsProps[]>([]);
+  // const [loadOccupations, setLoadOccupations] = useState<OccupationsProps[]>([]);
   const [providers, setProviders] = useState<Provider[]>([]);
   const [occupationsSelected, setOccupationsSelected] = useState(0); 
   
@@ -87,25 +87,25 @@ export function Home(){
               console.log("Error occurred: " + err);
           })
 
-          fetch("https://api-flash-services.herokuapp.com/src/Routes/occupation/read/", {
-            method: "GET",
-            headers: {
-              'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-              body: null
-            })
-            .then(response => response.json())
-            .then(data => {
-                const {occupations} = data
-                setLoadOccupations([{
-                  id: 0,
-                  name: 'TODOS'
-                },...occupations]);
-            })
-            .catch(err => {
-                console.log("Error occurred: " + err);
-            })     
+          // fetch("https://api-flash-services.herokuapp.com/src/Routes/occupation/read/", {
+          //   method: "GET",
+          //   headers: {
+          //     'Accept': 'application/json',
+          //       'Content-Type': 'application/json'
+          //   },
+          //     body: null
+          //   })
+          //   .then(response => response.json())
+          //   .then(data => {
+          //       const {occupations} = data
+          //       setLoadOccupations([{
+          //         id: 0,
+          //         name: 'TODOS'
+          //       },...occupations]);
+          //   })
+          //   .catch(err => {
+          //       console.log("Error occurred: " + err);
+          //   })     
 
     }
 
@@ -120,21 +120,28 @@ export function Home(){
     loadData();
   },[favorites])
   
-  function handleOccupationSelected (occupation: number){
-    setOccupationsSelected(occupation);
-    console.log(occupationsSelected)
-    if(occupation === 0){
-      return setFilteredPlants(plants)
-    }
+  // function handleOccupationSelected (occupation: number){
+  //   setOccupationsSelected(occupation);
+  //   console.log(occupationsSelected)
+  //   if(occupation === 0){
+  //     return setFilteredPlants(plants)
+  //   }
 
-    const filtered = plants.filter(plant => plant.environments.includes(environment))
+  //   const filtered = plants.filter(plant => plant.environments.includes(environment))
 
-    setFilteredPlants(filtered);
+  //   setFilteredPlants(filtered);
 
-  }
+  // }
 
-  const navigateToCreateAppointment = useCallback((providerId: string) => {
-    navigate('Appointments', {providerId})
+  // const navigateToCreateAppointment = useCallback((providerId: string) => {
+  //   navigate('Appointments', {providerId})
+  // },[navigate]);
+  const navigation = useNavigation();
+  const handleGoBack = useCallback(() => {
+    navigation.goBack();
+  },[]);
+  const navigateToProviderDetails = useCallback((providerId: string) => {
+    navigate('ProviderDetails', {providerId})
   },[navigate]);
 
   return(
@@ -145,7 +152,7 @@ export function Home(){
         >
         <Content>
           
-            <FlatList
+            {/* <FlatList
               data={loadOccupations}
               keyExtractor={(item) => String(item.name)}
               renderItem={({item})=>(
@@ -165,7 +172,7 @@ export function Home(){
                 marginLeft: 32,
                 marginVertical: 24,
               }}
-            />
+            /> */}
 
 
             <ProvidersList
@@ -176,7 +183,9 @@ export function Home(){
                     }
                     renderItem={({ item: provider }) => (
                       <ProviderContainer
-                        onPress={() => navigateToCreateAppointment(provider.id)}
+                        // onPress={() => navigateToCreateAppointment(provider.id)}
+                         onPress={() => navigateToProviderDetails(provider.id)}
+
                       >
                         <ProviderAvatar source={{ uri: provider.photo }} />
                         <ProviderInfo>

@@ -4,8 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 const { Navigator, Screen } = createStackNavigator();
 import {TabsRoutes} from './tabs.routes';
 import { Dashboard } from '../screens/Dashboard';
-import { Home } from '../screens/Home';
+// import { Home } from '../screens/Home';
 import { Appointments } from '../screens/Appointments';
+import { ProviderDetails } from '../screens/ProviderDetails';
 import { AppointmentsCreated } from '../screens/AppointmentsCreated';
 import {Profile} from '@screens/Profile';
 
@@ -23,6 +24,10 @@ export function AppRoutes(){
         <Screen
           name="Dashboard"
           component={Dashboard}
+        />
+        <Screen
+          name="ProviderDetails"
+          component={ProviderDetails}
         />
         <Screen
           name="Appointments"

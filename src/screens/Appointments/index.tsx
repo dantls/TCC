@@ -1,6 +1,7 @@
 import React, { useMemo, useState,useCallback, useEffect } from 'react';
-import DateTimePicker from '@react-native-community/datetimepicker'
+// import DateTimePicker from '@react-native-community/datetimepicker'
 import {Platform, Alert, Text} from 'react-native';
+import {StatusBar} from 'expo-status-bar';
 import { format } from 'date-fns';
 import {
   Container,
@@ -26,6 +27,9 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Calendar,  DateData, MarkedDateProps } from '@src/components/Calendar';
 import { generateMarked } from '@src/components/Calendar/generateMarked';
+import { BackButton } from '@src/components/BackButton';
+import { TextArea } from '@src/components/TextArea';
+import { Input } from '@src/components/Input';
 
 const initialDate = [
   {
@@ -95,16 +99,20 @@ export function Appointments(){
 
   const routeParams = route.params as RouteParams;
 
-  const [providers, setProviders] = useState<Provider[]>([]);
+  // const [providers, setProviders] = useState<Provider[]>([]);
   const [availability, setAvailability] = useState<AvailabilityItem[]>(initialDate);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId)
+  // const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId)
   const [selectedHour, setSelectedHour] = useState(0);
 
   const [selectedDate, setSelectedDate] = useState<DateData>({} as DateData);
 
-  const [markedDate, setMarketDate] = useState<MarkedDateProps>({}as MarkedDateProps)
+  const [markedDate, setMarketDate] = useState<MarkedDateProps>({}as MarkedDateProps);
+
+  const [typeservice,setTypeservice]  = useState('');
+  const [description,setDescription]  = useState('');
+  const [localservice,setLocalService]  = useState('');
 
   const handleChangeDate = (date:DateData)=>{
     setSelectedDate(date)
@@ -123,9 +131,9 @@ export function Appointments(){
   //   }
   // }
 
-  const handleSelectProvider = useCallback((providerId: string) => {
-    setSelectedProvider(providerId);
-  },[])
+  // const handleSelectProvider = useCallback((providerId: string) => {
+  //   setSelectedProvider(providerId);
+  // },[])
 
   const handleSelectHour = useCallback((hour:number) => {
     setSelectedHour(hour);
@@ -135,7 +143,6 @@ export function Appointments(){
     try{
       
       const date = new Date(selectedDate.year,selectedDate.month-1,selectedDate.day);
-      console.log(date)
       date.setHours(selectedHour);
       date.setMinutes(0);
 
@@ -181,37 +188,43 @@ export function Appointments(){
   },[])
 
  
-  useEffect(() => {
+  // useEffect(() => {
 
-    function loadProviders(){
-      fetch("https://api-flash-services.herokuapp.com/src/Routes/provider/getall/", {
-            method: "GET",
-            headers: {
-              'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-              body: null
-            })
-            .then(response => response.json())
-            .then(data  => {
-                const {providers: items} = data
-                setProviders(items);
-                console.log(items)
-            })
-            .catch(err => {
-                console.log("Error occurred: " + err);
-            })
-    }
+  //   function loadProviders(){
+  //     fetch("https://api-flash-services.herokuapp.com/src/Routes/provider/getall/", {
+  //           method: "GET",
+  //           headers: {
+  //             'Accept': 'application/json',
+  //               'Content-Type': 'application/json'
+  //           },
+  //             body: null
+  //           })
+  //           .then(response => response.json())
+  //           .then(data  => {
+  //               const {providers: items} = data
+  //               setProviders(items);
+  //               console.log(items)
+  //           })
+  //           .catch(err => {
+  //               console.log("Error occurred: " + err);
+  //           })
+  //   }
 
-    loadProviders();
-  },[])
+  //   loadProviders();
+  // },[])
 
   return (
-    <Container>
+<>
+  <StatusBar style="light"  backgroundColor="transparent" translucent/>
 
-      <Content>
+  <Container>
+  <BackButton 
+    color="#fff"
+  />
 
-      
+  <Content>
+
+    {/*       
       <ProvidersListContainer>
         <ProvidersList
           horizontal
@@ -232,34 +245,12 @@ export function Appointments(){
           )}
         
         />
-      </ProvidersListContainer>
+      </ProvidersListContainer> */}
       <CalendarTitle>Escolha a data</CalendarTitle>
       <Calendar
          markedDates={markedDate}
          onDayPress={handleChangeDate}
       />
-
-      {/* <Calendar>
-        <CalendarTitle>Escolha a data</CalendarTitle>
-
-        <OpenDatePickerButton
-          onPress={handleToggleDatePicker}
-        >
-          <OpenDatePickerText>Escolha outra data</OpenDatePickerText>
-        </OpenDatePickerButton>
-        {
-          showDatePicker &&
-          (
-            <DateTimePicker 
-              mode="date" 
-              is24Hour
-              display="calendar"
-              onChange={handleDateChanged}
-              value={selectedDate}
-            />
-          )        
-        }
-      </Calendar> */}
 
       <Schedule>
         <CalendarTitle>Escolha o horário</CalendarTitle>
@@ -304,6 +295,19 @@ export function Appointments(){
           </SectionContent>
         </Section>
       </Schedule>
+      <SectionTitle>Tipo do serviço</SectionTitle>
+    
+      <TextArea
+        onChangeText={setTypeservice}
+      />
+      <SectionTitle>Descrição do serviço</SectionTitle>
+      <TextArea
+        onChangeText={setDescription}
+      />
+      <SectionTitle>Local do serviço</SectionTitle>
+      <TextArea
+        onChangeText={setLocalService}
+      />
       <CreateAppointmentButton 
         onPress={
           handleCreateAppointment
@@ -313,5 +317,6 @@ export function Appointments(){
       </CreateAppointmentButton>
       </Content>
     </Container>
+    </>
   );
 }
