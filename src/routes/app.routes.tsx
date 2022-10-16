@@ -8,6 +8,7 @@ import { Dashboard } from '../screens/Dashboard';
 import { Appointments } from '../screens/Appointments';
 import { ProviderDetails } from '../screens/ProviderDetails';
 import { AppointmentsCreated } from '../screens/AppointmentsCreated';
+import { SplashScreen } from '../screens/SplashScreen';
 import {Profile} from '@screens/Profile';
 
 export function AppRoutes(){
@@ -17,6 +18,10 @@ export function AppRoutes(){
           headerShown:false,
         }}
       >
+        <Screen
+          name="SplashScreen"
+          component={SplashScreen}
+        />
         <Screen
           name="MainBottom"
           component={TabsRoutes}

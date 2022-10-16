@@ -22,7 +22,7 @@ export default function App() {
     RobotoSlab_700Bold
   })
   if(!fontsLoaded){
-    return <AppLoading />
+    // return <AppLoading />
   }
 
   return (

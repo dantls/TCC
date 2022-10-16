@@ -31,10 +31,6 @@ export function Favorite({ navigation }){
   const {user} = useAuth(); 
 
 
-   useEffect(() => {
-    getFavorites(user.id)
-
-  },[])
 
   const [isFavorite, setIsFavorite] = useState(false);
     
@@ -67,35 +63,40 @@ export function Favorite({ navigation }){
           behavior={Platform.OS === 'ios' ? 'padding': undefined}
         >
         {/* <Content> */}
+        {favorites &&
+          (
             <FavoritesList
-                    data={favorites}
-                    keyExtractor={favorite => favorite.id}
-                    ListHeaderComponent={
-                      <ProvidersListTitle>Profissionais Favoritos</ProvidersListTitle>
-                    }
-                    renderItem={({ item: favorite }) => (
-                      <ProviderContainer
-                        // onPress={() => navigateToCreateAppointment(provider.id)}
-                      >
-                        <ProviderAvatar source={{ uri: favorite.photo }} />
-                        <ProviderInfo>
-                          <ProviderName>{favorite.name}</ProviderName> 
-                          <ProviderMeta>
-                            <Icon name="phone" size={14} color="#FF9000" />
-                            <ProviderMetaText>{favorite.phone}</ProviderMetaText>
-                          </ProviderMeta>                      
-                        </ProviderInfo>
-                        
-                         
-                        <MaterialIcon
-                            name="favorite"
-                            size={24}
-                            color="#FF9000"
-                            onPress={() => toggleFavorite(favorite.id)}
-                        />
-                      </ProviderContainer>
-                    )}
-                  />
+            data={favorites}
+            keyExtractor={favorite => favorite.id}
+            ListHeaderComponent={
+              <ProvidersListTitle>Profissionais Favoritos</ProvidersListTitle>
+            }
+            renderItem={({ item: favorite }) => (
+              <ProviderContainer
+                // onPress={() => navigateToCreateAppointment(provider.id)}
+              >
+                <ProviderAvatar source={{ uri: favorite.photo }} />
+                <ProviderInfo>
+                  <ProviderName>{favorite.name}</ProviderName> 
+                  <ProviderMeta>
+                    <Icon name="phone" size={14} color="#FF9000" />
+                    <ProviderMetaText>{favorite.phone}</ProviderMetaText>
+                  </ProviderMeta>                      
+                </ProviderInfo>
+                
+                 
+                <MaterialIcon
+                    name="favorite"
+                    size={24}
+                    color="#FF9000"
+                    onPress={() => toggleFavorite(favorite.id)}
+                />
+              </ProviderContainer>
+            )}
+          />
+          )
+        }
+           
         {/* </Content> */}
 
         

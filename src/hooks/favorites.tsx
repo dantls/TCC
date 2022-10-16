@@ -57,12 +57,13 @@ const FavoritesProvider: React.FC = ({ children }) => {
       })
       .then(response => response.json())
       .then(data => {
+
         const {message} = data;
         if(message){
           Alert.alert("Error ao buscar favoritos")
         }else{
           const {favorites: fav} = data;
-          setFavorites([...fav]);
+          setFavorites(oldState => [...fav]);
         }
       })
       .catch(err => {
@@ -93,7 +94,7 @@ const FavoritesProvider: React.FC = ({ children }) => {
           console.log("Error occurred: " + err);
       })
 
-
+      // getFavorites(id);
     // await AsyncStorage.multiSet([
     //   ['@Work:token', token],
     //   ['@Work:user', JSON.stringify(user)],
@@ -120,7 +121,7 @@ const FavoritesProvider: React.FC = ({ children }) => {
           console.log("Error occurred: " + err);
       })
 
-
+      // getFavorites(iduser);
     // await AsyncStorage.multiSet([
     //   ['@Work:token', token],
     //   ['@Work:user', JSON.stringify(user)],

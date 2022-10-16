@@ -1,8 +1,13 @@
 import React,{useCallback, useState,useEffect} from 'react'; 
+import {  useRoute } from '@react-navigation/native';
+
 import { BackButton } from '@src/components/BackButton';
 import { ImageSlider } from '@src/components/ImageSlider';
+
+import { useFavorites } from '@hooks/favorites';
+import { useAuth } from '@hooks/auth';
+
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   Container,
   Content,
@@ -17,8 +22,6 @@ import {
 } from './styles';
 import api from '@src/services/api';
 
-
-
 interface RouteParams {
   providerId: string;
 }
@@ -31,9 +34,9 @@ export interface Provider {
   servicesoffered: string;
 }
 
+export function ProviderDetails({ navigation}){
 
-
-export function ProviderDetails(){
+  const {user} = useAuth(); 
 
   const route = useRoute();
 
@@ -41,7 +44,7 @@ export function ProviderDetails(){
 
   const [provider, setProvider] = useState<Provider>({} as Provider);
 
-  const navigation = useNavigation();
+  const { addFavorite} = useFavorites(); 
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -51,59 +54,39 @@ export function ProviderDetails(){
      navigation.navigate('Appointments', {providerId})
   },[navigation]);
 
+  function toggleFavorite (providerId: string){
+    addFavorite(user.id, providerId);
+    loadData();
+  }
+
+  async function loadData(){
+
+    const [ responseFavorites,responseProvider ] = await Promise.all([
+      api.post("/favorites/read/", {iduser: String(user.id)}), 
+      api.post("/provider/read/",{id: routeParams.providerId})
+    ]);
+ 
+      const favorite = responseFavorites.data.favorites.find( item => item.idprovider == Number(routeParams.providerId));
+      if(favorite){
+        responseProvider.data.isFavorite = true;
+      }else{
+        responseProvider.data.isFavorite = false;
+      }
+    setProvider(responseProvider.data);
+  }
   
+  
+  
+  useEffect(() => {
+    loadData();  
+  },[provider])
 
-  useEffect(() =>{
-    fetch("https://api-flash-services.herokuapp.com/src/Routes/provider/read/", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-        body: JSON.stringify({
-          "id": String(routeParams.providerId)
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-
-        setProvider(data)
-        // const {message} = data;
-        // if(message){
-        //   Alert.alert("Error ao buscar favoritos")
-        // }else{
-        //   const {favorites: fav} = data;
-        //   setFavorites([...fav]);
-        // }
-      })
-      .catch(err => {
-          console.log("Error occurred: " + err);
-      })
-
-  },[routeParams.providerId])
-
-
-  // useEffect(()=>{
-  //   async function loadProvider(){
-
-  //     // console.log(routeParams.providerId)
-  //     const response =  await api.post<Provider>('provider/read//',
-  //     JSON.stringify( {
-  //       id: routeParams.providerId
-  //     }),{
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       }
-  //     });
-
-  //     console.log(response.data);
-  //     // setProvider(response.data)
-  //   }
-
-  //   //   setProvider(response.data);
-  //   // console.log(provider)
-  //   loadProvider();
-  // },[routeParams])
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadData();
+    });
+    
+  }, [navigation]);  
   
   return(
     <Container>
@@ -124,14 +107,10 @@ export function ProviderDetails(){
         <About>{provider.servicesoffered}</About>
      
         <MaterialIcon
-          name={'favorite'}
-          // name={provider.isFavorite ? 'favorite' : 'favorite-border'}
+          name={provider.isFavorite ? 'favorite' : 'favorite-border'}
           size={24}
           color="#FF9000"
-          onPress={
-            () => {}
-            // () => toggleFavorite(provider.id)
-          }
+          onPress={() => toggleFavorite(String(provider.id))}
         />
           {/* <Rating>Avaliações:</Rating> */}
      
