@@ -1,16 +1,15 @@
-import React, {useState, useEffect} from 'react'; 
+import React, {useState, useEffect, useCallback, useMemo} from 'react'; 
 import Icon from 'react-native-vector-icons/Feather';
-
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import { useRecents } from '@hooks/recents';
+import { useAuth } from '@hooks/auth';
 import {
   Container,
-  Content,
-  Title,
-  ProvidersList,
-  ProvidersListTitle,
-  ProviderContainer,
+  FavoritesList,
   ProviderMeta,
   ProviderMetaText,
+  ProvidersListTitle,
+  ProviderContainer,
   ProviderAvatar,
   ProviderInfo,
   ProviderName,
@@ -24,65 +23,25 @@ export interface Provider {
   photo: string;
 }
 
-export function Recent(){
+export function Recent({ navigation }){
+  const {getRecents,removeRecent, recents} = useRecents(); 
+  const {user} = useAuth(); 
+  const [isFavorite, setIsFavorite] = useState(false);
+    
+  const toggleRecent = useCallback(async (id: string) => {
+    // Toggle if food is favorite or not
+    // setIsFavorite(!isFavorite);
+    removeRecent(id)
+    getRecents(user.id)
 
-  // useEffect(() => {
-  //   fetch("https://api-flash-services.herokuapp.com/src/Routes/occupation/read/", {
-  //         method: "GET",
-  //         headers: {
-  //           'Accept': 'application/json',
-  //             'Content-Type': 'application/json'
-  //         },
-  //           body: null
-  //         })
-  //         .then(response => response.json())
-  //         .then(data => {
-  //             const {occupations} = data
-  //             setLoadOccupations([{
-  //               id: 0,
-  //               name: 'TODOS'
-  //             },...occupations]);
-  //         })
-  //         .catch(err => {
-  //             console.log("Error occurred: " + err);
-  //         })
+  }, [isFavorite]);
 
-  // },[])
-  
- 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getRecents(user.id)
+    })
+  }, [])
 
-  const providers: Provider[] = [
-    {
-      "id": 3,
-      "name": "ALAM TRINDADE MANUTENçõES",
-      "email": "alam.trindade@bonitoponto.com.br",
-      "photo": "https://eletrokassio.com.br/wp-content/uploads/elementor/thumbs/Manutencoes-Residenciais-pf4uomuxioe64g84homm3euiom3uaryuwlpsi0f0k4.png"
-      // "phone": "(67)98418-1733",
-      // "password": null,
-      // "cash": null,
-      // "idoccupation": null
-    },
-    {
-      "id": 2,
-      "name": "ALAM TRINDADE MANUTENçõES",
-      "email": "alam.trindade@bonitoponto.com.br",
-      "photo": "https://eletrokassio.com.br/wp-content/uploads/elementor/thumbs/Manutencoes-Residenciais-pf4uomuxioe64g84homm3euiom3uaryuwlpsi0f0k4.png"
-      // "password": null,
-      // "phone": "(67)98418-1733",
-      // "cash": null,
-      // "idoccupation": null
-    },
-    {
-      "id": 1,
-      "name": "ALAM TRINDADE MANUTENçõES",
-      "email": "alam.trindade@bonitoponto.com.br",
-      "photo": "https://eletrokassio.com.br/wp-content/uploads/elementor/thumbs/Manutencoes-Residenciais-pf4uomuxioe64g84homm3euiom3uaryuwlpsi0f0k4.png"
-      // "phone": "(67)98418-1733",
-      // "password": null,
-      // "cash": null,
-      // "idoccupation": null
-    },
-  ]
 
 
   return(
@@ -91,33 +50,35 @@ export function Recent(){
           behavior={Platform.OS === 'ios' ? 'padding': undefined}
         >
         {/* <Content> */}
-            <ProvidersList
-                    data={providers}
-                    keyExtractor={provider => provider.id}
-                    ListHeaderComponent={
-                      <ProvidersListTitle>Recentes</ProvidersListTitle>
-                    }
-                    renderItem={({ item: provider }) => (
-                      <ProviderContainer
-                        // onPress={() => navigateToCreateAppointment(provider.id)}
-                      >
-                        <ProviderAvatar source={{ uri: provider.photo }} />
-                        <ProviderInfo>
-                          <ProviderName>{provider.name}</ProviderName>
-                          <ProviderMeta>
-                            <Icon name="calendar" size={14} color="#FF9000" />
-                            <ProviderMetaText>Segunda à sábado</ProviderMetaText>
-                          </ProviderMeta>
-
-                          <ProviderMeta>
-                            <Icon name="clock" size={14} color="#FF9000" />
-                            <ProviderMetaText>8h às 18h</ProviderMetaText>
-                          </ProviderMeta>
-                        </ProviderInfo>
-                      </ProviderContainer>
-                    )}
-                  />
+        {recents &&
+          (
+            <FavoritesList
+            data={recents}
+            keyExtractor={recent => recent.id}
+            ListHeaderComponent={
+              <ProvidersListTitle>Recentes</ProvidersListTitle>
+            }
+            renderItem={({ item: recent }) => (
+              <ProviderContainer
+                // onPress={() => navigateToCreateAppointment(provider.id)}
+              >
+                <ProviderAvatar source={{ uri: recent.photo }} />
+                <ProviderInfo>
+                  <ProviderName>{recent.name}</ProviderName> 
+                  <ProviderMeta>
+                    <Icon name="phone" size={14} color="#FF9000" />
+                    <ProviderMetaText>{recent.phone}</ProviderMetaText>
+                  </ProviderMeta>                      
+                </ProviderInfo>
+                
+              </ProviderContainer>
+            )}
+          />
+          )
+        }
+           
         {/* </Content> */}
+
         
       </KeyboardAvoidingView>
     </Container>

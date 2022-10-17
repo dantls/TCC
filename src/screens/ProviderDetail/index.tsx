@@ -34,7 +34,7 @@ export interface Provider {
   servicesoffered: string;
 }
 
-export function ProviderDetails({ navigation}){
+export function ProviderDetail({ navigation}){
 
   const {user} = useAuth(); 
 

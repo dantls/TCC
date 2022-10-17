@@ -102,7 +102,7 @@ export function Home({ navigation }){
   // }
   
   const navigateToProviderDetails = useCallback((providerId: string) => {
-    navigation.navigate('ProviderDetails', {providerId})
+    navigation.navigate('ProviderDetail', {providerId})
   },[navigation.navigate]);
   
   return(

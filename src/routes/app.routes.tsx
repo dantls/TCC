@@ -6,7 +6,7 @@ import {TabsRoutes} from './tabs.routes';
 import { Dashboard } from '../screens/Dashboard';
 // import { Home } from '../screens/Home';
 import { Appointments } from '../screens/Appointments';
-import { ProviderDetails } from '../screens/ProviderDetails';
+import { ProviderDetail } from '../screens/ProviderDetail';
 import { AppointmentsCreated } from '../screens/AppointmentsCreated';
 import { SplashScreen } from '../screens/SplashScreen';
 import {Profile} from '@screens/Profile';
@@ -31,8 +31,8 @@ export function AppRoutes(){
           component={Dashboard}
         />
         <Screen
-          name="ProviderDetails"
-          component={ProviderDetails}
+          name="ProviderDetail"
+          component={ProviderDetail}
         />
         <Screen
           name="Appointments"

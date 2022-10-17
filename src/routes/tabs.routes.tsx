@@ -8,6 +8,7 @@ import {Home} from '@screens/Home';
 import {Favorite} from '@screens/Favorite';
 import {Recent} from '@screens/Recent';
 import {Profile} from '@screens/Profile';
+import {Schedules} from '@screens/Schedules';
 
 
 
@@ -57,8 +58,8 @@ export function TabsRoutes(){
     />
    
     <Screen
-      name="Recentes"
-      component={Recent}
+      name="Agenda"
+      component={Schedules}
       options={{
         tabBarIcon: (({ size, color }) => (
           <MaterialIcons

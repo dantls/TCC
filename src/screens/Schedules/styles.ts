@@ -1,7 +1,7 @@
 import styled, {css} from 'styled-components/native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { FlatList } from 'react-native';
-import { Favorite } from '../../hooks/favorites';
+import { Service } from './index';
 import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
@@ -34,11 +34,11 @@ export const Title = styled.Text`
 
 `;
 
-export const FavoritesList = styled(FlatList as new () => FlatList<Favorite>)`
+export const ServicesList = styled(FlatList as new () => FlatList<Service>)`
   padding: 32px 24px 16px;
 `;
 
-export const ProviderContainer = styled(RectButton)`
+export const ServicesContainer = styled(RectButton)`
   background: #3e3b47;
   border-radius: 10px;
   padding: 20px;
@@ -47,35 +47,42 @@ export const ProviderContainer = styled(RectButton)`
   align-items: center;
 `;
 
-export const ProviderAvatar = styled.Image`
+export const ServicesAvatar = styled.Image`
   width: 72px;
   height: 72px;
   border-radius: 36px;
 `;
 
-export const ProviderInfo = styled.View`
+export const ServicesInfo = styled.View`
   flex: 1;
   margin-left: 20px;
 `;
 
-export const ProviderName = styled.Text`
+export const ServicesName = styled.Text`
   font-family: ${({theme}) => theme.FONTS.MEDIUM};
   font-size: 18px;
   color: #f4ede8;
 `;
 
-export const ProviderMeta = styled.View`
+export const ServicesMeta = styled.View`
   flex-direction: row;
   align-items: center;
   margin-top: 8px;
 `;
 
-export const ProviderMetaText = styled.Text`
+export const ServicesMetaText = styled.Text`
   color: #999591;
   margin-left: 8px;
+  margin-right: 8px;
   font-family: ${({theme}) => theme.FONTS.TEXT};
 `;
-export const ProvidersListTitle = styled.Text`
+export const ServicesText = styled.Text`
+  color: #999591;
+  /* margin-left: 8px; */
+  margin-right: 8px;
+  font-family: ${({theme}) => theme.FONTS.TEXT};
+`;
+export const ServicesListTitle = styled.Text`
   font-family: ${({theme}) => theme.FONTS.MEDIUM};
   font-size: 24px;
   color: #f4ede8;
