@@ -46,6 +46,17 @@ export const ServicesContainer = styled(RectButton)`
   flex-direction: row;
   align-items: center;
 `;
+export const RemoveButton = styled.TouchableOpacity`
+  width: 100px;
+  height: 85px;
+  background-color: ${({theme}) => theme.COLORS.PRIMARY_900};
+  margin-top: 15px;
+  border-radius: 20px;
+  justify-content:center;
+  align-items: center;
+  right: 15px;
+  padding-left: 10px;
+`;
 
 export const ServicesAvatar = styled.Image`
   width: 72px;
@@ -67,6 +78,16 @@ export const ServicesName = styled.Text`
 export const ServicesMeta = styled.View`
   flex-direction: row;
   align-items: center;
+  margin-top: 8px;
+`;
+export const ServicesTime = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 8px;
+`;
+export const ServicesTimeContainer = styled.View`
+  flex-direction: column;
+  align-items: baseline;
   margin-top: 8px;
 `;
 

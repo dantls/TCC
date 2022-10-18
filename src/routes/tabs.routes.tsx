@@ -58,7 +58,7 @@ export function TabsRoutes(){
     />
    
     <Screen
-      name="Agenda"
+      name="Serviços"
       component={Schedules}
       options={{
         tabBarIcon: (({ size, color }) => (

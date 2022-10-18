@@ -1,22 +1,28 @@
 import React, { useEffect,useState } from 'react'; 
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform ,View} from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { useAuth } from '@hooks/auth';
+import {useTheme} from 'styled-components/native';
 import {
   Container,
-  Title,
+  RemoveButton,
   ServicesList,
   ServicesContainer,
   ServicesAvatar,
+  ServicesTimeContainer,
   ServicesInfo,
   ServicesName,
   ServicesMeta,
   ServicesText,
+  ServicesTime,
   ServicesMetaText,
   ServicesListTitle,
  
 } from './styles';
 import api from '@src/services/api';
 import Icon from 'react-native-vector-icons/Feather';
+import { Animated } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 export interface Service {
   id: number;
@@ -28,9 +34,29 @@ export interface Service {
 }
 
 export function Schedules({ navigation }){
+  const theme = useTheme();
   const {user} = useAuth(); 
   const [services, setServices] = useState<Service[]>([]);
-  
+  async function handleRemove(service :Service) {
+    Alert.alert('Remover',`Deseja remover a ${service.idprovider}?`,[
+      {
+        text: 'Não',
+        style: 'cancel'
+      },
+      {
+        text: 'Sim',
+        onPress: async ()=>{
+          try {
+            const responseServices = await api.post("/service/delete/", {id: String(service.id)}); 
+            setServices(oldData => oldData.filter(item => item.id !== service.id))
+          }
+          catch(error){
+            Alert.alert('Não foi possível remover')
+          }
+        }
+      }
+    ])
+  }
   async function loadData(){
 
     const responseServices = await api.post("/service/getbyuser/", {iduser: String(user.id)}); 
@@ -39,17 +65,7 @@ export function Schedules({ navigation }){
 
     setServices(service);
  
-    console.log(services);
-    // const formattedProviders = responseServices.data.service.map((provider:Provider) => {
-    //   const favorite = responseFavorites.data.favorites.find( item => item.idprovider == provider.id);
-    //   if(favorite){
-    //     provider.isFavorite = true;
-    //     return provider;
-    //   }else{
-    //     provider.isFavorite = false;
-    //     return provider
-    //   }
-    // });
+   
 
     // setProviders([...formattedProviders]);
 
@@ -71,27 +87,51 @@ export function Schedules({ navigation }){
               <ServicesListTitle>Serviços Agendados</ServicesListTitle>
             }
             renderItem={({ item: service }) => (
-              <ServicesContainer
-                // onPress={() => navigateToCreateAppointment(provider.id)}
+              <Swipeable
+                overshootRight={false}
+                renderRightActions={()=>(
+                  <Animated.View>
+                    <View>
+                        <RemoveButton
+                          onPress={() => handleRemove(service)}
+                        >
+                          <Feather 
+                            name="trash"
+                            size={32}
+                            color= {theme.COLORS.SHAPE}
+                          />
+                        </RemoveButton>
+                    </View>
+                  </Animated.View>
+                )}
               >
-                <ServicesInfo>
-                  <ServicesName>{service.idprovider}</ServicesName> 
-                  <ServicesMeta>
-                    {/* <Icon name="phone" size={14} color="#FF9000" /> */}
-                    <ServicesText>{service.typeservice}</ServicesText>
-                  </ServicesMeta>       
-                  <ServicesText>{service.description}</ServicesText>               
-                  <ServicesMeta>
-                    <Icon name="calendar" size={14} color="#FF9000" />
-                    <ServicesMetaText>{service.dateservice}</ServicesMetaText>
-                    <Icon name="clock" size={14} color="#FF9000" />
-                    <ServicesMetaText>{service.timeservice}</ServicesMetaText>
-                  </ServicesMeta>                      
-                    
-                </ServicesInfo>
-                
-            
-              </ServicesContainer>
+                <ServicesContainer
+                  // onPress={() => navigateToCreateAppointment(provider.id)}
+                >
+                  <ServicesInfo>
+                    <ServicesName>{service.idprovider}</ServicesName> 
+                    <ServicesMeta>
+                      {/* <Icon name="phone" size={14} color="#FF9000" /> */}
+                      <ServicesText>{service.typeservice}</ServicesText>
+                    </ServicesMeta>       
+                    <ServicesText>{service.description}</ServicesText>               
+                                      
+                      
+                  </ServicesInfo>
+                  
+                  <ServicesTimeContainer>
+                    <ServicesTime>
+                        <Icon name="calendar" size={14} color="#FF9000" />
+                        <ServicesMetaText>{service.dateservice}</ServicesMetaText>
+                    </ServicesTime>  
+                    <ServicesTime>  
+                        <Icon name="clock" size={14} color="#FF9000" />
+                        <ServicesMetaText>{service.timeservice}</ServicesMetaText>
+                    </ServicesTime>   
+                  </ServicesTimeContainer>
+              
+                </ServicesContainer>
+              </Swipeable>
             )}
           />
       
