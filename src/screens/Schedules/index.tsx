@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react'; 
-import { Alert, KeyboardAvoidingView, Platform ,View} from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform ,View, RefreshControl} from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useAuth } from '@hooks/auth';
 import {useTheme} from 'styled-components/native';
@@ -37,6 +37,8 @@ export function Schedules({ navigation }){
   const theme = useTheme();
   const {user} = useAuth(); 
   const [services, setServices] = useState<Service[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   async function handleRemove(service :Service) {
     Alert.alert('Remover',`Deseja remover a ${service.idprovider}?`,[
       {
@@ -65,11 +67,14 @@ export function Schedules({ navigation }){
 
     setServices(service);
  
-   
-
-    // setProviders([...formattedProviders]);
-
+    setRefreshing(false);
   }
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setServices([]);
+    loadData();
+  };
 
   useEffect(() => {
     loadData();
@@ -85,6 +90,12 @@ export function Schedules({ navigation }){
             keyExtractor={service => String(service.id)}
             ListHeaderComponent={
               <ServicesListTitle>Serviços Agendados</ServicesListTitle>
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
             }
             renderItem={({ item: service }) => (
               <Swipeable

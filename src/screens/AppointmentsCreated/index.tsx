@@ -23,7 +23,6 @@ export function AppointmentsCreated(){
 
   const routeParams = params as RouteParams;
 
-
   const handleOkPressed = useCallback(() => {
     reset({
       routes: [

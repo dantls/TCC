@@ -119,6 +119,7 @@ export function Appointments(){
   const [localservice,setLocalService]  = useState('');
 
   const handleChangeDate = (date:DateData)=>{
+    console.log(date)
     setSelectedDate(date)
     setMarketDate(generateMarked(date))
   }
@@ -149,11 +150,13 @@ export function Appointments(){
       const date = new Date(selectedDate.year,selectedDate.month-1,selectedDate.day);
       date.setHours(selectedHour);
       date.setMinutes(0);
+
+      console.log(date)
       
       const data = {
         iduser: user.id,
         idprovider:selectedProvider,
-        dateservice: `${selectedDate.day}-${String(selectedDate.month-1).padStart(2,'0')}-${selectedDate.year}`,
+        dateservice: `${selectedDate.day}-${String(selectedDate.month).padStart(2,'0')}-${selectedDate.year}`,
         timeservice: `${String(selectedHour).padStart(2,'0')}:00`,  
         localservice,
         typeservice,
