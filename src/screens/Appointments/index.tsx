@@ -151,12 +151,10 @@ export function Appointments(){
       date.setHours(selectedHour);
       date.setMinutes(0);
 
-      console.log(date)
-      
       const data = {
         iduser: user.id,
         idprovider:selectedProvider,
-        dateservice: `${selectedDate.day}-${String(selectedDate.month).padStart(2,'0')}-${selectedDate.year}`,
+        dateservice: `${String(selectedDate.day).padStart(2,'0')}-${String(selectedDate.month).padStart(2,'0')}-${selectedDate.year}`,
         timeservice: `${String(selectedHour).padStart(2,'0')}:00`,  
         localservice,
         typeservice,
