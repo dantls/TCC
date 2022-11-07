@@ -7,6 +7,7 @@ import { RectButton } from 'react-native-gesture-handler';
 export const Container = styled.View`
   flex: 1;
   background-color: ${({theme}) => theme.COLORS.BACKGROUND};
+  padding-bottom: ${getBottomSpace() + 68}px;
   /* justify-content: center; */
 `;
 
@@ -21,16 +22,23 @@ export const Container = styled.View`
 //   /* padding: 0 32px; */
 
 // `;
-export const Content = styled.View`
+export const Content = styled.SafeAreaView`
   width: 100%;
-  padding-bottom: ${ getBottomSpace() + 48}px;
+  padding-bottom: 130px;
+
+  /* margin-bottom: 50px; */
   /* padding: 0 32px; */
 
 `;
 
+export const SearchArea = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin: 12px 52px 0 24px;
+`
+
 export const Title = styled.Text`
   font-size: 32px;
-  margin: 26px 0 0;
   align-self: center;
 
   ${({theme})=> css`
@@ -41,7 +49,7 @@ export const Title = styled.Text`
 `;
 
 export const ProvidersList = styled(FlatList as new () => FlatList<Provider>)`
-  padding: 32px 24px 32px;
+  padding: 0px 24px 0px;
 `;
 
 export const ProviderContainer = styled(RectButton)`

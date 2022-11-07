@@ -5,7 +5,8 @@ import { useAuth } from '../../hooks/auth';
 import { Button } from '@components/Button';
 import { useNavigation } from '@react-navigation/native';
 
-import { KeyboardAvoidingView, Platform } from 'react-native';
+ 
+  import {  Alert,KeyboardAvoidingView, Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -28,7 +29,11 @@ export function SignIn(){
   const [password,setPassword]  = useState('');
 
   function handleRegister(){
-    signIn({email, password});
+    try{
+      signIn({email, password});
+    }catch(error){
+      Alert.alert('Usuário/Senha incorretos.');
+    }
    // signOut();
   
     // fetch("https://api-flash-services.herokuapp.com/src/Routes/login/", {
@@ -98,10 +103,10 @@ export function SignIn(){
               type="secondary"
               onPress={handleRegister}
             />
-
+{/* 
             <ForgotPasswordButton>
               <ForgotPasswordLabel>Esqueci minha senha</ForgotPasswordLabel>
-            </ForgotPasswordButton>
+            </ForgotPasswordButton> */}
 
             <CreateAccountButton
               onPress={() => {

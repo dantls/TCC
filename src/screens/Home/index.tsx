@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useCallback, useMemo} from 'react'; 
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
-import { KeyboardAvoidingView, Platform } from 'react-native';
-// import { FlatList } from 'react-native-gesture-handler';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {TouchableOpacity} from 'react-native';
 import { useAuth } from '@hooks/auth';
 // import { OccupationButton } from '../../components/OccupationButton';
 // import { Provider } from '../Provider';
 import { Header } from '@src/components/Header/Index';
+import { Input } from '@src/components/Input';
 
 import {
   Container,
@@ -20,6 +20,8 @@ import {
   ProviderAvatar,
   ProviderInfo,
   ProviderName,
+  // Input,
+  SearchArea
 } from './styles';
 import api from '@src/services/api';
 
@@ -50,10 +52,30 @@ export interface Favorite {
 export function Home({ navigation }){
   const {user} = useAuth(); 
   
-  // const [loadOccupations, setLoadOccupations] = useState<OccupationsProps[]>([]);
   const [providers, setProviders] = useState<Provider[]>([]);
-  const [occupationsSelected, setOccupationsSelected] = useState(0); 
-  
+
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    if (searchText === '') {
+      loadData();
+    } else {
+      setProviders(
+        providers.filter(
+          (item) =>
+            item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        )
+      );
+    }
+  }, [searchText]);
+
+  const handleOrderClick = () => {
+    let newList = [...providers];
+
+    newList.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+
+    setProviders(newList);
+  };
   
   async function loadData(){
 
@@ -74,7 +96,12 @@ export function Home({ navigation }){
       }
     });
 
-    setProviders([...formattedProviders]);
+    let newList = [...formattedProviders];
+
+    newList.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+    
+
+    setProviders([...newList]);
 
   }
   
@@ -85,22 +112,7 @@ export function Home({ navigation }){
     
   }, [navigation]);  
   
-  
-  
-  
-  // function handleOccupationSelected (occupation: number){
-  //   setOccupationsSelected(occupation);
-  //   console.log(occupationsSelected)
-  //   if(occupation === 0){
-  //     return setFilteredPlants(plants)
-  //   }
-  
-  //   const filtered = plants.filter(plant => plant.environments.includes(environment))
-  
-  //   setFilteredPlants(filtered);
-  
-  // }
-  
+    
   const navigateToProviderDetails = useCallback((providerId: string) => {
     navigation.navigate('ProviderDetail', {providerId})
   },[navigation.navigate]);
@@ -108,72 +120,68 @@ export function Home({ navigation }){
   return(
     <Container>
     <Header />
-    <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding': undefined}
-    >
-    <Content>
-    
-    {/* <FlatList
-    data={loadOccupations}
-    keyExtractor={(item) => String(item.name)}
-    renderItem={({item})=>(
-      <OccupationButton 
-      title={item.name}
-      active={item.id === occupationsSelected}
-      onPress={()=>{handleOccupationSelected(Number(item.id))}}
-      />
-      )}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{
-        height: 40,
-        justifyContent:'center',
-        paddingBottom: 5,
-        paddingRight: 30,
-        marginLeft: 32,
-        marginVertical: 24,
-      }}
-    /> */}
-    
-    {providers &&(
-    <ProvidersList
-      data={providers}
-      keyExtractor={provider => provider.id}
-      ListHeaderComponent={
-       <ProvidersListTitle>Profissionais</ProvidersListTitle>
-     }
-     renderItem={({ item: provider }) => (
-      <ProviderContainer
-      onPress={() => navigateToProviderDetails(provider.id)}
-      >
-      <ProviderAvatar source={{ uri: provider.photo }} />
-      <ProviderInfo>
-      <ProviderName>{provider.name}</ProviderName>
-      <ProviderMeta>
-      <Icon name="calendar" size={14} color="#FF9000" />
-      <ProviderMetaText>Segunda à sábado</ProviderMetaText>
-      </ProviderMeta>
-      
-      <ProviderMeta>
-      <Icon name="clock" size={14} color="#FF9000" />
-      <ProviderMetaText>8h às 18h</ProviderMetaText>
-      </ProviderMeta>
-      </ProviderInfo>
-      <MaterialIcon
-      name={provider.isFavorite ? 'favorite' : 'favorite-border'}
-      size={24}
-      color="#FF9000"
-      // onPress={() => toggleFavorite(provider.id)}
-      />
-      </ProviderContainer>
-      )}
-      />
 
-  )}
+    <SearchArea>
+        <Input
+          placeholder="Pesquise uma pessoa"
+          value={searchText}
+          onChangeText={(t) => setSearchText(t)}
+        />
+        <TouchableOpacity 
+          onPress={handleOrderClick} 
+          style={{
+            width: 32,
+            marginRight: 30,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="order-alphabetical-ascending"
+            size={32}
+            color="#888"
+          />
+        </TouchableOpacity>
+      </SearchArea>
+
+    <Content>
+   
+        {providers &&(
+        <ProvidersList
+          data={providers}
+          keyExtractor={provider => provider.id}
+          ListHeaderComponent={
+          <ProvidersListTitle>Profissionais</ProvidersListTitle>
+        }
+        renderItem={({ item: provider }) => (
+          <ProviderContainer
+          onPress={() => navigateToProviderDetails(provider.id)}
+          >
+          <ProviderAvatar source={{ uri: provider.photo }} />
+          <ProviderInfo>
+          <ProviderName>{provider.name}</ProviderName>
+          <ProviderMeta>
+          <Icon name="calendar" size={14} color="#FF9000" />
+          <ProviderMetaText>Segunda à sábado</ProviderMetaText>
+          </ProviderMeta>
+          
+          <ProviderMeta>
+          <Icon name="clock" size={14} color="#FF9000" />
+          <ProviderMetaText>8h às 18h</ProviderMetaText>
+          </ProviderMeta>
+          </ProviderInfo>
+          <MaterialIcon
+          name={provider.isFavorite ? 'favorite' : 'favorite-border'}
+          size={24}
+          color="#FF9000"
+          // onPress={() => toggleFavorite(provider.id)}
+          />
+          </ProviderContainer>
+          )}
+          />
+
+      )}
       </Content>
       
       
-      </KeyboardAvoidingView>
       </Container>
       )
     }

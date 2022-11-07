@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Alert } from 'react-native';
 interface User {
   id: string;
   name:string;
@@ -58,6 +58,7 @@ const AuthProvider: React.FC = ({ children }) => {
   },[])
 
   const signIn = useCallback(async ({ email, password }) => {
+    try{
     const response = await api.post('https://api-flash-services.herokuapp.com/src/Routes/login/',JSON.stringify( {
       email,
       password,
@@ -79,6 +80,10 @@ const AuthProvider: React.FC = ({ children }) => {
     setData({ 
      // token, 
       user });
+    }catch(error){
+      Alert.alert('Usuário/Senha incorretos.');
+    }
+
   }, []);
 
   const signOut = useCallback(async () => {
