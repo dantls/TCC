@@ -86,14 +86,14 @@ export function SignIn(){
             <Title>Faça seu Login</Title>
             <Input 
               placeholder="E-mail"
-              type="secondary"
+              // type="secondary"
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setEmail}
             />
             <Input 
               placeholder="Senha"
-              type="secondary"
+              // type="secondary"
               secureTextEntry
               onChangeText={setPassword}
 

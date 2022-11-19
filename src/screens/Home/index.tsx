@@ -1,11 +1,9 @@
-import React, {useState, useEffect, useCallback, useMemo} from 'react'; 
+import React, {useState, useEffect, useCallback} from 'react'; 
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {TouchableOpacity} from 'react-native';
 import { useAuth } from '@hooks/auth';
-// import { OccupationButton } from '../../components/OccupationButton';
-// import { Provider } from '../Provider';
 import { Header } from '@src/components/Header/Index';
 import { Input } from '@src/components/Input';
 
@@ -20,7 +18,6 @@ import {
   ProviderAvatar,
   ProviderInfo,
   ProviderName,
-  // Input,
   SearchArea
 } from './styles';
 import api from '@src/services/api';

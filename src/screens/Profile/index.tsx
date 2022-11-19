@@ -118,7 +118,7 @@ export function Profile(){
             </UserAvatarButton>
             <Input 
               placeholder="Nome"
-              type="secondary"
+              // type="secondary"
               value={user.name}
               autoCorrect = {false}
               autoCapitalize = "none"
@@ -126,7 +126,7 @@ export function Profile(){
             />
             <Input 
              placeholder="E-mail"
-             type="secondary"
+            //  type="secondary"
              value = {user.email}
              autoCorrect = {false}
              autoCapitalize = "none"
@@ -134,7 +134,7 @@ export function Profile(){
             />
             <Input 
              placeholder="Celular"
-             type="secondary"
+            //  type="secondary"
              value = {user.phone}
              autoCorrect = {false}
              autoCapitalize = "none"
@@ -142,7 +142,7 @@ export function Profile(){
             />
             <Input 
               placeholder="Rua"
-              type="secondary"
+              // type="secondary"
               value = {user.street}
               autoCorrect = {false}
               autoCapitalize = "none"
@@ -151,7 +151,7 @@ export function Profile(){
          
             <Input 
               placeholder="Bairro"
-              type="secondary"
+              // type="secondary"
               value = {user.district}
               autoCorrect = {false}
               autoCapitalize = "none"
@@ -160,15 +160,13 @@ export function Profile(){
           
             <Input 
               placeholder="Cidade"
-              type="secondary"
+              // type="secondary"
               value = {user.city}
               autoCorrect = {false}
               autoCapitalize = "none"
               onChangeText={setCity}
             />
-            
-           
-           
+          
             <Button 
               title="Salvar"
               type="secondary"
